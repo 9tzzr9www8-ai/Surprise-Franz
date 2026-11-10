@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fff1f7">
+<title>Une petite surprise pour Franz 💗</title>
+<style>
+:root{--pink:#f7a9c8;--deep:#b94f7c;--ink:#684456;--cream:#fff9fc;--line:#f6d7e4}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Georgia,"Times New Roman",serif;color:var(--ink);background:radial-gradient(circle at 15% 10%,#fff 0 8%,transparent 30%),linear-gradient(145deg,#fff4f8,#fce3ee 55%,#fff8fb);overflow-x:hidden}
+main{width:min(92%,620px);margin:0 auto;padding:38px 0 56px;position:relative;z-index:1}
+.top{text-align:center;font-family:Arial,sans-serif;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:#bd7895}
+.card{background:rgba(255,255,255,.86);border:1px solid white;border-radius:28px;padding:clamp(24px,6vw,46px);box-shadow:0 18px 55px #bd789526;text-align:center;backdrop-filter:blur(8px);margin-top:20px}
+.heart{font-size:2.5rem;animation:pulse 1.8s infinite}
+h1{font-size:clamp(2rem,7vw,3.1rem);line-height:1.1;margin:14px 0;color:#a94873;font-weight:normal}
+h2{font-size:clamp(1.45rem,5vw,2rem);font-weight:normal;color:#a94873;margin:10px 0 16px}
+p{font-size:1.12rem;line-height:1.7;margin:12px 0}
+.small{font: .9rem/1.6 Arial,sans-serif;color:#9b7184}
+button{font:600 1rem Arial,sans-serif;border:0;border-radius:999px;padding:14px 22px;cursor:pointer;transition:transform .18s,box-shadow .18s}
+button:hover{transform:translateY(-2px);box-shadow:0 8px 18px #b94f7c25}
+.primary{background:#d96f9b;color:white}
+.secondary{background:#fff0f6;color:#a94873;border:1px solid #f3ccdc}
+.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.progress{height:5px;background:#f8e4ed;border-radius:10px;margin:24px auto 0;max-width:220px;overflow:hidden}
+.bar{height:100%;width:0;background:#d96f9b;transition:width .3s}
+.hidden{display:none}
+.final{font-size:1.3rem}
+.signature{margin-top:26px;color:#b65c83;font-style:italic}
+.floating{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.floating span{position:absolute;bottom:-35px;opacity:.45;animation:rise linear infinite}
+@keyframes rise{to{transform:translateY(-110vh) rotate(35deg);opacity:0}}
+@keyframes pulse{50%{transform:scale(1.12)}}
+footer{text-align:center;font: .78rem Arial,sans-serif;color:#b18498;margin-top:18px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="floating" aria-hidden="true" id="hearts"></div>
+<main>
+  <div class="top">Une petite surprise rien que pour toi</div>
+  <section class="card" aria-live="polite">
+    <div class="heart">💗</div>
+    <div id="intro">
+      <h1>Coucou Franz…</h1>
+      <p>J’ai préparé quelque chose pour toi.<br>Prends quelques instants et ouvre les petits messages, un par un. 💌</p>
+      <div class="actions"><button class="primary" id="start">Ouvrir ma surprise ✨</button></div>
+    </div>
+    <div id="message" class="hidden">
+      <div class="small" id="counter">MESSAGE 1 / 4</div>
+      <h2 id="messageTitle"></h2>
+      <p id="messageText"></p>
+      <div class="actions"><button class="primary" id="next">Lire la suite 💗</button></div>
+      <div class="progress"><div class="bar" id="bar"></div></div>
+    </div>
+    <div id="question" class="hidden">
+      <h1>Alors Franz… 💞</h1>
+      <p class="final">Même si des kilomètres nous séparent, j’aimerais qu’on donne une chance à notre histoire.</p>
+      <h2>Est-ce que tu voudrais être mon copain ?</h2>
+      <p class="small">Prends le temps de me répondre sincèrement. Ce qui compte, c’est qu’on en ait tous les deux envie. 💗</p>
+      <div class="actions">
+        <button class="primary" id="yes">Oui 💗</button>
+        <button class="secondary" id="talk">J’aimerais qu’on en parle 💌</button>
+      </div>
+      <p id="reply" class="signature hidden"></p>
+    </div>
+  </section>
+  <footer>Fait avec douceur, malgré les kilomètres. 🌷</footer>
+</main>
+<script>
+const messages=[
+  ["Un petit mot pour toi 💌","Même à distance, tu arrives à mettre de la douceur dans mes journées. J’aime apprendre à te connaître et partager des moments avec toi."],
+  ["Les kilomètres… 🌍","On ne peut peut-être pas se voir quand on le voudrait, mais la distance n’empêche pas les attentions, les discussions et les beaux moments."],
+  ["Ce que j’aimerais 💕","J’aimerais qu’on continue à se découvrir, à se faire confiance et à construire quelque chose à notre rythme, sans se mettre la pression."],
+  ["Et maintenant… ✨","J’avais envie de te poser une question importante. Alors voici ma petite demande…"]
+];
+let index=0;
+const $=id=>document.getElementById(id);
+function show(id){["intro","message","question"].forEach(x=>$(x).classList.toggle("hidden",x!==id))}
+function render(){ $("counter").textContent=`MESSAGE ${index+1} / ${messages.length}`; $("messageTitle").textContent=messages[index][0]; $("messageText").textContent=messages[index][1]; $("bar").style.width=((index+1)/messages.length*100)+"%"; $("next").textContent=index===messages.length-1?"Découvrir la question 💗":"Lire la suite 💗";}
+$("start").addEventListener("click",()=>{index=0;render();show("message")});
+$("next").addEventListener("click",()=>{index++;if(index<messages.length)render();else show("question")});
+$("yes").addEventListener("click",()=>{$("reply").textContent="Tu viens de rendre cette petite surprise encore plus belle. On en parle tous les deux ? 💗";$("reply").classList.remove("hidden");$("yes").disabled=true;$("yes").textContent="Merci 💗"});
+$("talk").addEventListener("click",()=>{$("reply").textContent="Merci de me répondre sincèrement. J’aimerais beaucoup en discuter avec toi. 💌";$("reply").classList.remove("hidden")});
+const holder=$("hearts");for(let i=0;i<18;i++){const s=document.createElement("span");s.textContent=["♡","♥","✧"][i%3];s.style.left=(Math.random()*100)+"%";s.style.animationDuration=(9+Math.random()*12)+"s";s.style.animationDelay=(-Math.random()*18)+"s";s.style.fontSize=(14+Math.random()*20)+"px";holder.appendChild(s)}
+</script>
+</body>
+</html>
